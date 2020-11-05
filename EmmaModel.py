@@ -3,6 +3,7 @@
 
 import nltk
 import gensim
+import io
 
 # nltk.download('gutenberg')
 from nltk.corpus import gutenberg
@@ -64,4 +65,22 @@ for sent in emma_sents:
 from gensim.models import Word2Vec
 model_emma = Word2Vec(sentences, min_count = 1, size = 50, workers = 3, window = 5, sg = 0)
 wv = model_emma.wv
+
+
+def saveWordVecPairInFile(wv):
+      out_v = io.open('vectorsEmma.tsv', 'w', encoding='utf-8')
+      out_m = io.open('metadataEmma.tsv', 'w', encoding='utf-8')
+
+      vocabulary = list(wv.vocab.keys())
+
+
+      for index, word in enumerate(vocabulary):
+         vec = wv[word]
+         out_v.write('\t'.join([str(x) for x in vec]) + "\n")
+         out_m.write(word + "\n")
+      out_v.close()
+      out_m.close()
+
+saveWordVecPairInFile(wv)
+
 
