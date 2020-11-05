@@ -1,0 +1,13 @@
+{
+  "embeddings": [
+    {
+      "tensorName": "w2v multi domain",
+      "tensorShape": [
+        1000,
+        50
+      ],
+      "tensorPath": "https://github.com/ZhouXing19/WordEmbeddingfromMultiDomain/blob/master/vectors.tsv",
+      "metadataPath": "https://github.com/ZhouXing19/WordEmbeddingfromMultiDomain/blob/master/metadata.tsv"
+    }
+  ]
+}
