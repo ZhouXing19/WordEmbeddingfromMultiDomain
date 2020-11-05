@@ -1,5 +1,10 @@
-# help from https://www.kaggle.com/
-# venugopalvasarla/using-word2vec-and-glove-for-word-embeddings/notebook
+'''
+References:
+   - nltk corpus : https://www.nltk.org/book/ch02.html
+   - the meaning of the categories in the corpus reuters of NLTK: https://stackoverflow.com/questions/25134160/whats-the-meaning-of-the-categories-in-the-corpus-reuters-of-nltk
+   - venugopalvasarla/using-word2vec-and-glove-for-word-embeddings/notebook
+   - https://www.kaggle.com/
+'''
 
 import nltk
 import gensim
