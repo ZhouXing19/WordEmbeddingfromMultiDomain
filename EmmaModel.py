@@ -8,6 +8,8 @@ import gensim
 from nltk.corpus import gutenberg
 
 import re
+import string
+string.punctuation = string.punctuation + " "
 
 
 # importing relevant text from nltk database
@@ -31,7 +33,7 @@ charfilter = re.compile("[a-zA-Z]+")
 def simple_filter(Sent):
     
     #converting all tokens to lower case:
-    words = sent.split()
+    words = re.split("[" + string.punctuation + "]+", sent)
     word_lower = []
     for word in words:
         word_lower.append(word.lower())
@@ -63,4 +65,3 @@ from gensim.models import Word2Vec
 model_emma = Word2Vec(sentences, min_count = 1, size = 50, workers = 3, window = 5, sg = 0)
 wv = model_emma.wv
 
-        
