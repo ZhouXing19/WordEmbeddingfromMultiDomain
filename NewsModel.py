@@ -9,6 +9,7 @@ from nltk.corpus import brown
 
 import re
 import string
+import io
 string.punctuation = string.punctuation + " "
 
 
@@ -70,3 +71,19 @@ for sent in news_sents:
 from gensim.models import Word2Vec
 model_news = Word2Vec(sentences, min_count = 1, size = 50, workers = 3, window = 5, sg = 0)
 wv = model_news.wv
+
+def saveWordVecPairInFile(wv):
+      out_v = io.open('vectorsNews.tsv', 'w', encoding='utf-8')
+      out_m = io.open('metadataNews.tsv', 'w', encoding='utf-8')
+
+      vocabulary = list(wv.vocab.keys())
+
+
+      for index, word in enumerate(vocabulary):
+         vec = wv[word]
+         out_v.write('\t'.join([str(x) for x in vec]) + "\n")
+         out_m.write(word + "\n")
+      out_v.close()
+      out_m.close()
+
+saveWordVecPairInFile(wv)
