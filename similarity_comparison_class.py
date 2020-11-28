@@ -1,5 +1,7 @@
 import NewsModel
 import EmmaModel
+import PersuasionModel
+import MobyModel
 import io
 import collections
 import pandas as pd
@@ -33,30 +35,29 @@ class similarityComparison:
         self.simlex_top_sim_999 = list(simlex)
 
 
-        self.vocabulary_emma = list(EmmaModel.wv.vocab.keys())
-        self.vocabulary_news = list(NewsModel.wv.vocab.keys())
-
-        self.shared_vocab_set = set([item for item in self.vocabulary_emma if item in self.vocabulary_news])
+        self.EmmaModel = EmmaModel
+        self.NewsModel = NewsModel
+        self.PersuasionModel = PersuasionModel
+        self.MobyModel = MobyModel
 
     def record_significant_matches(self, w1, w2, sim_score, sim_name):
             self.result[(w1, w2)][sim_name] = sim_score
 
-    def update_similarity_dict(self):
-        for (w1, w2, sim) in self.human_top_sim_353:
-            if w1 in self.shared_vocab_set and w2 in self.shared_vocab_set:
-                self.record_significant_matches(w1, w2, sim, "353_sim")
-                news_out = NewsModel.model_news.wv.similarity(w1, w2)
-                emma_out = EmmaModel.model_emma.wv.similarity(w1, w2)
-                self.record_significant_matches(w1, w2, news_out, "news_out")
-                self.record_significant_matches(w1, w2, emma_out, "emma_out")
+    def update_similarity_dict(self, model1, model2, human_model, model1_name, model2_name, human_model_name):
 
-        for (w1, w2, sim) in self.simlex_top_sim_999:
-            if w1 in self.shared_vocab_set and w2 in self.shared_vocab_set:
-                self.record_significant_matches(w1, w2, sim, "999_sim")
-                news_out = NewsModel.model_news.wv.similarity(w1, w2)
-                emma_out = EmmaModel.model_emma.wv.similarity(w1, w2)
-                self.record_significant_matches(w1, w2, news_out, "news_out")
-                self.record_significant_matches(w1, w2, emma_out, "emma_out")
+        vocab1 = list(model1.wv.vocab.keys())
+        vocab2 = list(model2.wv.vocab.keys())
+        shared_vocab_set = set([item for item in vocab1 if item in vocab2])
+
+
+        for (w1, w2, sim) in human_model:
+            if w1 in shared_vocab_set and w2 in shared_vocab_set:
+                self.record_significant_matches(w1, w2, sim, human_model_name)
+                m1_out = model1.wv.similarity(w1, w2)
+                m2_out = model2.wv.similarity(w1, w2)
+                self.record_significant_matches(w1, w2, m1_out, model1_name)
+                self.record_significant_matches(w1, w2, m2_out, model2_name)
+
 
     def sort_result(self):
 
@@ -66,6 +67,8 @@ class similarityComparison:
 
         self.sim_pairs_353 = sorted(self.sim_pairs_353, key = lambda  x: -x[1]["353_sim"])
         self.sim_pairs_999 = sorted(self.sim_pairs_999, key=lambda x: -x[1]["999_sim"])
+
+
 
     def plot_heatmap(self, data, sort_col = None, save_fig = None, isdict = False):
         if not isdict:
@@ -83,10 +86,54 @@ class similarityComparison:
 
 
 
-
 if __name__ == "__main__":
     model = similarityComparison()
-    model.update_similarity_dict()
+
+    EmmaModel = model.EmmaModel
+    NewsModel = model.NewsModel
+    MobyModel = model.MobyModel
+    PersuasionModel = model.PersuasionModel
+
+    Human353 = model.human_top_sim_353
+    Human999 = model.simlex_top_sim_999
+
+    model.update_similarity_dict(EmmaModel, NewsModel, Human353, "Emma", "News", "353_sim")
+    model.update_similarity_dict(EmmaModel, NewsModel, Human999, "Emma", "News", "999_sim")
+
     model.sort_result()
-    model.plot_heatmap(model.sim_pairs_353, "353_sim", "figs/353_sim.png")
-    model.plot_heatmap(model.sim_pairs_999, "999_sim", "figs/999_sim.png")
+    model.plot_heatmap(model.sim_pairs_353, "353_sim", "figs/353_sim_emma_news.png")
+    model.plot_heatmap(model.sim_pairs_999, "999_sim", "figs/999_sim_emma_news.png")
+
+
+    model = similarityComparison()
+    model.update_similarity_dict(EmmaModel, MobyModel, Human353, "Emma", "Moby", "353_sim")
+    model.update_similarity_dict(EmmaModel, MobyModel, Human999, "Emma", "Moby", "999_sim")
+    model.sort_result()
+    model.plot_heatmap(model.sim_pairs_353, "353_sim", "figs/353_sim_emma_moby.png")
+    model.plot_heatmap(model.sim_pairs_999, "999_sim", "figs/999_sim_emma_moby.png")
+
+
+    model = similarityComparison()
+    model.update_similarity_dict(EmmaModel, PersuasionModel, Human353, "Emma", "Persuasion", "353_sim")
+    model.update_similarity_dict(EmmaModel, PersuasionModel, Human999, "Emma", "Persuasion", "999_sim")
+    model.sort_result()
+    model.plot_heatmap(model.sim_pairs_353, "353_sim", "figs/353_sim_emma_persuasion.png")
+    model.plot_heatmap(model.sim_pairs_999, "999_sim", "figs/999_sim_emma_persuasion.png")
+
+    model = similarityComparison()
+    model.update_similarity_dict(MobyModel, NewsModel, Human353, "Moby", "News", "353_sim")
+    model.update_similarity_dict(MobyModel, NewsModel, Human999, "Moby", "News", "999_sim")
+    model.sort_result()
+    model.plot_heatmap(model.sim_pairs_353, "353_sim", "figs/353_sim_moby_news.png")
+    model.plot_heatmap(model.sim_pairs_999, "999_sim", "figs/999_sim_moby_news.png")
+
+    model = similarityComparison()
+    model.update_similarity_dict(PersuasionModel, NewsModel, Human353, "Persuasion", "News", "353_sim")
+    model.update_similarity_dict(PersuasionModel, NewsModel, Human999, "Persuasion", "News", "999_sim")
+    model.sort_result()
+    model.plot_heatmap(model.sim_pairs_353, "353_sim", "figs/353_sim_persuasion_news.png")
+    model.plot_heatmap(model.sim_pairs_999, "999_sim", "figs/999_sim_persuasion_news.png")
+
+
+
+
