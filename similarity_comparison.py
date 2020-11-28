@@ -31,15 +31,15 @@ def record_significant_matches(w1, w2, sim):
 	# human_word: human_sim, news_sim, lit_sim
 	sim_reference = collections.defaultdict(list)
 
-	if w1 and w2 in shared_vocab_set:
+	if w1 in shared_vocab_set and w2 in shared_vocab_set:
+		print(w1, w2)
 		news_out = NewsModel.model_news.wv.similarity(w1, w2)
 		emma_out = EmmaModel.model_emma.wv.similarity(w1, w2)
 		sim_reference[w1].append(w2)
 		sim_reference[w1].append(sim)
 		sim_reference[w1].append(news_out)
 		sim_reference[w1].append(emma_out)
-
-	print("\n\n Dictionary of similaritiy references: ", sim_reference)
+		print("\n\n Dictionary of similaritiy references: ", sim_reference)
 
 	return sim_reference
 
