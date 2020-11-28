@@ -1,6 +1,7 @@
 import NewsModel
 import EmmaModel
 import io
+import collections
 
 def compare_top_similar(word):
 	out_news = set()
@@ -15,14 +16,17 @@ def compare_top_similar(word):
 	for j in preprocessed_lit_similarities:
 		out_novel.add(j[0])
 	
-	shared_words = 0
-	for i in out_news:
-                if i in out_novel:
-                        shared_words += 1
+	shared_words_count = 0
+	shared_words = collections.defaultdict(list)
+	for k in out_news:
+		if k in out_novel:
+			shared_words[word].append(k)
+			shared_words_count += 1
 
 	print ("\n\n News Analysis: Words Most Similar to ", word, ":", out_news)
 	print ("\n\n Novel Analysis: Words Most Similar to ", word, ":", out_novel)
 	print("Shared Similar Words: ", shared_words)
+	print("Shared Similar Words Count: ", shared_words_count)
 
 
 vocabulary_emma = list(EmmaModel.wv.vocab.keys())
