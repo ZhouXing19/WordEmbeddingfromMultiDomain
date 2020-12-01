@@ -73,8 +73,8 @@ wv = model_emma.wv
 
 
 def saveWordVecPairInFile(wv):
-      out_v = io.open('vectorsEmma.tsv', 'w', encoding='utf-8')
-      out_m = io.open('metadataEmma.tsv', 'w', encoding='utf-8')
+      out_v = io.open('tsvs/vectorsEmma.tsv', 'w', encoding='utf-8')
+      out_m = io.open('tsvs/metadataEmma.tsv', 'w', encoding='utf-8')
 
       vocabulary = list(wv.vocab.keys())
 

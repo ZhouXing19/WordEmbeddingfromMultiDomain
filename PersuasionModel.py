@@ -73,8 +73,8 @@ wv = model_persuasion.wv
 
 
 def saveWordVecPairInFile(wv):
-      out_v = io.open('vectorsPersuasion.tsv', 'w', encoding='utf-8')
-      out_m = io.open('metadataPersuasion.tsv', 'w', encoding='utf-8')
+      out_v = io.open('tsvs/vectorsPersuasion.tsv', 'w', encoding='utf-8')
+      out_m = io.open('tsvs/metadataPersuasion.tsv', 'w', encoding='utf-8')
 
       vocabulary = list(wv.vocab.keys())
 

@@ -73,8 +73,8 @@ wv = model_moby.wv
 
 
 def saveWordVecPairInFile(wv):
-      out_v = io.open('vectorsMoby.tsv', 'w', encoding='utf-8')
-      out_m = io.open('metadataMoby.tsv', 'w', encoding='utf-8')
+      out_v = io.open('tsvs/vectorsMoby.tsv', 'w', encoding='utf-8')
+      out_m = io.open('tsvs/metadataMoby.tsv', 'w', encoding='utf-8')
 
       vocabulary = list(wv.vocab.keys())
 

@@ -79,8 +79,8 @@ class WordToVecModel:
       return Word2VecKeyedVectors
 
    def saveWordVecPairInFile(self, wv):
-      out_v = io.open('vectors.tsv', 'w', encoding='utf-8')
-      out_m = io.open('metadata.tsv', 'w', encoding='utf-8')
+      out_v = io.open('tsvs/vectors.tsv', 'w', encoding='utf-8')
+      out_m = io.open('tsvs/metadata.tsv', 'w', encoding='utf-8')
 
       vocabulary = list(wv.vocab.keys())
 

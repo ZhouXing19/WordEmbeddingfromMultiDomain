@@ -78,8 +78,8 @@ model_news = Word2Vec(sentences, min_count = 1, size = 50, workers = 3, window =
 wv = model_news.wv
 
 def saveWordVecPairInFile(wv):
-      out_v = io.open('vectorsNews.tsv', 'w', encoding='utf-8')
-      out_m = io.open('metadataNews.tsv', 'w', encoding='utf-8')
+      out_v = io.open('tsvs/vectorsNews.tsv', 'w', encoding='utf-8')
+      out_m = io.open('tsvs/metadataNews.tsv', 'w', encoding='utf-8')
 
       vocabulary = list(wv.vocab.keys())
 
