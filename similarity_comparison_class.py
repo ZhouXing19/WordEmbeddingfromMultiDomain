@@ -48,6 +48,7 @@ class similarityComparison:
         vocab1 = list(model1.wv.vocab.keys())
         vocab2 = list(model2.wv.vocab.keys())
         shared_vocab_set = set([item for item in vocab1 if item in vocab2])
+        print( "Share : " + str(2 * len(shared_vocab_set) / (len(vocab1) + len(vocab2))))
 
 
         for (w1, w2, sim) in human_model:
