@@ -4,6 +4,10 @@ import MobyModel
 import PersuasionModel
 import io
 import collections
+import pandas as pd
+import numpy as np
+from scipy import stats
+from matplotlib import pyplot as plt
 
 class top_similar_words:
 	def __init__(self, model1, model2):
@@ -73,7 +77,32 @@ class top_similar_words:
 				"sim_2": sim_2
 			}
 
+	def get_mean_concreteness(self, word_list, concreteness_dict):
+		return np.nanmean([concreteness_dict.get(word, np.nan) for word in word_list])
+
+	def compare_concreteness(self, concreteness_dict, word=None):
+		if word is not None:
+			print('Concreteness of ' + word + ': '+ str(concreteness_dict.get(word, np.nan)))
+			cr_mn_1 = self.get_mean_concreteness(self.table[word]['sim_1'], concreteness_dict)
+			print('Concreteness of Top Similar Words in Model 1: '+ str(cr_mn_1))
+			cr_mn_2 = self.get_mean_concreteness(self.table[word]['sim_2'], concreteness_dict)
+			print('Concreteness of Top Similar Words in Model 2: '+ str(cr_mn_2))
+			return None
+		else:
+			cr_1 = []
+			cr_2 = []
+			for k,v in self.table.items():
+				cr_1.append(self.get_mean_concreteness(v['sim_1'],concreteness_dict))
+				cr_2.append(self.get_mean_concreteness(v['sim_2'],concreteness_dict))
+			print(stats.ttest_rel(cr_1, cr_2, nan_policy='omit'))
+			return (cr_1, cr_2)
+
+
+
 if __name__ == "__main__":
+	cr_df = pd.read_excel("Concreteness_ratings_Brysbaert_et_al_BRM.xlsx")
+	cr_dict = cr_df[['Word','Conc.M']].set_index('Word').to_dict()['Conc.M']
+
 	EmmaNews = top_similar_words(EmmaModel, NewsModel)
 	EmmaNews.compare_two_models()
 	EmmaNews.turn_res_table()
@@ -98,17 +127,55 @@ if __name__ == "__main__":
 	pers_voc = EmmaPersuasion.vocab2
 	print(2*len(EmmaPersuasion.res) / (len(emma_voc) + len(pers_voc)))
 
-	print(EmmaNews.table["love"])
-	print(EmmaMoby.table["love"])
-	print(EmmaPersuasion.table["love"])
 
-	print(EmmaNews.table["wealth"])
-	print(EmmaMoby.table["wealth"])
-	print(EmmaPersuasion.table["wealth"])
 
-	print(EmmaNews.table["women"])
-	print(EmmaMoby.table["women"])
-	print(EmmaPersuasion.table["women"])
+	cr_1, cr_2 = EmmaNews.compare_concreteness(cr_dict)
+
+	plt.figure(figsize=(8,6))
+	plt.hist(cr_1, bins=100, alpha=0.5, label="Emma")
+	plt.hist(cr_2, bins=100, alpha=0.5, label="News")
+	plt.xlabel("Data", size=14)
+	plt.ylabel("Count", size=14)
+	plt.title("Mean Similar-Word-Concreteness Values for Two Models")
+	plt.legend(loc='upper right')
+	plt.savefig('emmanews_cr.png')
+
+	cr_1, cr_2 = EmmaMoby.compare_concreteness(cr_dict)
+
+	plt.figure(figsize=(8,6))
+	plt.hist(cr_1, bins=100, alpha=0.5, label="Emma")
+	plt.hist(cr_2, bins=100, alpha=0.5, label="Moby")
+	plt.xlabel("Data", size=14)
+	plt.ylabel("Count", size=14)
+	plt.title("Mean Similar-Word-Concreteness Values for Two Models")
+	plt.legend(loc='upper right')
+	plt.savefig('emmamoby_cr.png')
+
+	cr_1, cr_2 = EmmaPersuasion.compare_concreteness(cr_dict)
+
+	plt.figure(figsize=(8,6))
+	plt.hist(cr_1, bins=100, alpha=0.5, label="Emma")
+	plt.hist(cr_2, bins=100, alpha=0.5, label="Persuasion")
+	plt.xlabel("Data", size=14)
+	plt.ylabel("Count", size=14)
+	plt.title("Mean Similar-Word-Concreteness Values for Two Models")
+	plt.legend(loc='upper right')
+	plt.savefig('emmapersuasion_cr.png')
+
+	# print(EmmaNews.table["love"])
+	# print(EmmaMoby.table["love"])
+	# print(EmmaPersuasion.table["love"])
+
+	# print(EmmaNews.table["wealth"])
+	# print(EmmaMoby.table["wealth"])
+	# print(EmmaPersuasion.table["wealth"])
+
+	# print(EmmaNews.table["women"])
+	# print(EmmaMoby.table["women"])
+	# print(EmmaPersuasion.table["women"])
+
+
+
 
 
 
