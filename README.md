@@ -9,5 +9,17 @@ Final Project for LING 28610 (Autumn 2020)
 
 ### Visualization
 
-[Tensorflow Embedding Projector](http://projector.tensorflow.org/?config=https://gist.githubusercontent.com/ZhouXing19/a9a69e737b0821f3c3eff14d85e0f859/raw/603f082938207b95f0645a03fb43fcd961d87312/w2v_visual)
+1. Please go to [tensorflow projector](http://projector.tensorflow.org/)
+2. On the left panel, click on **Load** and upload the metadata and vectordata with the same model name from [tsv dir](/tsvs)
+
+### Models
+
+ - [EmmaModel](./EmmaModel.py)
+ - [NewsModel](./NewsModel.py)
+ - [MobyModel](./MobyModel.py)
+ - [PersuasionModel](./PersuasionModel.py)]
+
+### Analysis
+ - Top Similar Words for Model Pair: [here](./top_similar_words_edited.py)
+ - Similarity Comparison: [here](similarity_comparison_class.py)
 
