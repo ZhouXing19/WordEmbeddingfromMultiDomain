@@ -17,9 +17,10 @@ Final Project for LING 28610 (Autumn 2020)
  - [EmmaModel](./EmmaModel.py)
  - [NewsModel](./NewsModel.py)
  - [MobyModel](./MobyModel.py)
- - [PersuasionModel](./PersuasionModel.py)]
+ - [PersuasionModel](./PersuasionModel.py)
 
 ### Analysis
  - Top Similar Words for Model Pair: [here](./top_similar_words_edited.py)
+ - Concreteness Analysis: [here](./top_similar_words_edited.py)
  - Similarity Comparison: [here](similarity_comparison_class.py)
 
